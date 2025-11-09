@@ -326,4 +326,14 @@ For issues or questions, please open an issue on the repository.
 
 ---
 
+## 👨‍💻 Author
+
+**Kalpak Manwar**
+
+- 📧 Email: [kalpakm11@gmail.com](mailto:kalpakm11@gmail.com)
+- 📱 Contact: 8767309189
+- 🔗 GitHub: [@kalpakmanwar](https://github.com/kalpakmanwar)
+
+---
+
 **Built with ❤️ using Spring Boot and React**
