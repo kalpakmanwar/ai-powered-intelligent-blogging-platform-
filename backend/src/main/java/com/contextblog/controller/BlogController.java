@@ -23,7 +23,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/blogs")
-@CrossOrigin(origins = "http://localhost:3000")
 public class BlogController {
     @Autowired
     private BlogService blogService;
