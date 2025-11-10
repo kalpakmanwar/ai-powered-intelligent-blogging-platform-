@@ -168,30 +168,38 @@ ai-context-blog/
 
 ### Backend Configuration (`application.properties`)
 
-```properties
-# Server
-server.port=8080
+1. Copy the example configuration file:
+   ```bash
+   cp backend/src/main/resources/application.properties.example backend/src/main/resources/application.properties
+   ```
 
-# Database (MySQL)
-spring.datasource.url=jdbc:mysql://localhost:3306/ai_context_blog?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-spring.datasource.username=root
-spring.datasource.password=your-mysql-password
-spring.datasource.driverClassName=com.mysql.cj.jdbc.Driver
+2. Edit `backend/src/main/resources/application.properties` and replace placeholders:
+   ```properties
+   # Server
+   server.port=8080
 
-# JPA
-spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
-spring.jpa.hibernate.ddl-auto=update
+   # Database (MySQL) - Replace with your credentials
+   spring.datasource.url=jdbc:mysql://localhost:3306/ai_context_blog?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+   spring.datasource.username=YOUR_DB_USERNAME
+   spring.datasource.password=YOUR_DB_PASSWORD
+   spring.datasource.driverClassName=com.mysql.cj.jdbc.Driver
 
-# JWT
-jwt.secret=your-secret-key-change-this-in-production
-jwt.expiration=86400000
+   # JPA
+   spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
+   spring.jpa.hibernate.ddl-auto=update
 
-# OpenAI API
-openai.api.key=${OPENAI_API_KEY:your-openai-api-key-here}
+   # JWT - Generate a strong random secret
+   jwt.secret=YOUR_JWT_SECRET_KEY_HERE
+   jwt.expiration=86400000
 
-# CORS
-cors.allowed-origins=http://localhost:3000
-```
+   # OpenRouter API - Get your key from https://openrouter.ai/keys
+   openai.api.key=YOUR_OPENROUTER_API_KEY_HERE
+
+   # CORS
+   cors.allowed-origins=http://localhost:3000
+   ```
+
+**⚠️ Security Note:** Never commit `application.properties` with real credentials. It's already in `.gitignore`. Use `application.properties.example` as a template.
 
 **Note:** For development with H2 database, use the `dev` profile:
 ```bash
@@ -323,16 +331,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## 📞 Support
 
 For issues or questions, please open an issue on the repository.
-
----
-
-## 👨‍💻 Author
-
-**Kalpak Manwar**
-
-- 📧 Email: [kalpakm11@gmail.com](mailto:kalpakm11@gmail.com)
-- 📱 Contact: 8767309189
-- 🔗 GitHub: [@kalpakmanwar](https://github.com/kalpakmanwar)
 
 ---
 

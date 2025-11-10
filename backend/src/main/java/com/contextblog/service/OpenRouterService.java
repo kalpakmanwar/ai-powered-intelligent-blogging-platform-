@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import jakarta.annotation.PostConstruct;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +39,25 @@ public class OpenRouterService {
         factory.setReadTimeout((int) TimeUnit.SECONDS.toMillis(15)); // Reduced from 30s to 15s
         this.restTemplate = new RestTemplate(factory);
         this.objectMapper = new ObjectMapper();
+    }
+    
+    /**
+     * Validate API key configuration at startup
+     */
+    @PostConstruct
+    public void validateApiKey() {
+        if (apiKey == null || apiKey.isEmpty() || apiKey.equals("your-openai-api-key-here")) {
+            logger.warn("⚠️  WARNING: OpenRouter API key is not configured or is using default value.");
+            logger.warn("⚠️  Please set a valid API key in application.properties: openai.api.key=YOUR_KEY_HERE");
+            logger.warn("⚠️  Get your API key from: https://openrouter.ai/keys");
+            logger.warn("⚠️  AI features will use fallback responses until a valid key is configured.");
+        } else if (!apiKey.startsWith("sk-or-v1-")) {
+            logger.warn("⚠️  WARNING: API key format may be incorrect. OpenRouter keys typically start with 'sk-or-v1-'");
+            logger.warn("⚠️  Please verify your API key in application.properties");
+        } else {
+            logger.info("✅ OpenRouter API key configured successfully");
+            logger.info("📝 API key starts with: {}", apiKey.substring(0, Math.min(15, apiKey.length())) + "...");
+        }
     }
     
     public String generateSummary(String content) {
@@ -300,8 +320,17 @@ public class OpenRouterService {
                     
                     // If it's authentication error, don't try other models
                     if (e.getStatusCode() == HttpStatus.UNAUTHORIZED || e.getStatusCode() == HttpStatus.FORBIDDEN) {
-                        logger.error("Authentication error - API key might be invalid");
-                        return "I'm sorry, but there was an authentication error. Please check your API key in the backend configuration (application.properties).";
+                        logger.error("❌ Authentication error - API key might be invalid or expired");
+                        logger.error("❌ Error details: {}", errorBody);
+                        logger.error("❌ Please check your API key in backend/src/main/resources/application.properties");
+                        logger.error("❌ Get a new key from: https://openrouter.ai/keys");
+                        return "I'm sorry, but there was an authentication error. Please check your API key in the backend configuration (application.properties).\n\n" +
+                               "Troubleshooting:\n" +
+                               "1. Verify your API key in backend/src/main/resources/application.properties\n" +
+                               "2. Get a new key from https://openrouter.ai/keys\n" +
+                               "3. Ensure the key starts with 'sk-or-v1-'\n" +
+                               "4. Restart the backend server after updating the key\n" +
+                               "5. Check backend logs for detailed error messages";
                     }
                     
                     // If it's model not found, try next model
@@ -630,8 +659,10 @@ public class OpenRouterService {
                     logger.warn("HTTP error for model {}: Status={}, Body={}", model, e.getStatusCode(), errorBody);
                     
                     if (e.getStatusCode() == HttpStatus.UNAUTHORIZED || e.getStatusCode() == HttpStatus.FORBIDDEN) {
-                        logger.error("API key issue for model {}. Error: {}", model, errorBody);
-                        lastException = new RuntimeException("API key is invalid or expired. Please check your OpenRouter API key configuration.");
+                        logger.error("❌ API key issue for model {}. Error: {}", model, errorBody);
+                        logger.error("❌ Please check your API key in backend/src/main/resources/application.properties");
+                        logger.error("❌ Get a new key from: https://openrouter.ai/keys");
+                        lastException = new RuntimeException("API key is invalid or expired. Please check your OpenRouter API key configuration in application.properties. Get a new key from https://openrouter.ai/keys");
                         break; // Don't try other models if API key is invalid
                     } else if (e.getStatusCode() == HttpStatus.BAD_REQUEST) {
                         logger.warn("Bad request for model {}. Trying next model. Error: {}", model, errorBody);

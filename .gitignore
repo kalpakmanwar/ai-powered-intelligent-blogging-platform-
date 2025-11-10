@@ -35,3 +35,9 @@ Thumbs.db
 .env
 .env.local
 
+# Backend configuration files with sensitive data
+backend/src/main/resources/application.properties
+backend/src/main/resources/application-*.properties
+!backend/src/main/resources/application.properties.example
+!backend/src/main/resources/application-dev.properties.example
+
