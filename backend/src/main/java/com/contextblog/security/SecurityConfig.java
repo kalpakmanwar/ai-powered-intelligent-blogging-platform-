@@ -60,6 +60,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers(request -> "OPTIONS".equals(request.getMethod())).permitAll() // Allow all OPTIONS preflight requests
                 .requestMatchers(new AntPathRequestMatcher("/api/auth/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/api/blogs/analyze")).permitAll() // Allow AI analysis without auth
                 .requestMatchers(new AntPathRequestMatcher("/api/blogs/trending-tags")).permitAll() // Public trending tags
