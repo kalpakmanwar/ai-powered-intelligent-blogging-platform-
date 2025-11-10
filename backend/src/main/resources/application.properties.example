@@ -4,10 +4,11 @@ spring.application.name=ai-context-blog
 
 # Database Configuration (MySQL)
 # IMPORTANT: Replace with your actual database credentials
-spring.datasource.url=jdbc:mysql://localhost:3306/ai_context_blog?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+# For production, use environment variables: ${DATABASE_URL}, ${DB_USERNAME}, ${DB_PASSWORD}
+spring.datasource.url=${DATABASE_URL:jdbc:mysql://localhost:3306/ai_context_blog?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}
 spring.datasource.driverClassName=com.mysql.cj.jdbc.Driver
-spring.datasource.username=YOUR_DB_USERNAME
-spring.datasource.password=YOUR_DB_PASSWORD
+spring.datasource.username=${DB_USERNAME:YOUR_DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD:YOUR_DB_PASSWORD}
 
 # JPA Configuration
 spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
@@ -24,7 +25,8 @@ spring.datasource.hikari.idle-timeout=300000
 
 # JWT Configuration
 # IMPORTANT: Generate a strong random secret key for production
-jwt.secret=YOUR_JWT_SECRET_KEY_HERE
+# For production, use environment variable: ${JWT_SECRET}
+jwt.secret=${JWT_SECRET:YOUR_JWT_SECRET_KEY_HERE}
 jwt.expiration=86400000
 
 # OpenRouter API Configuration
