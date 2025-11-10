@@ -1,0 +1,2 @@
+web: cd backend && java -jar target/ai-powered-intelligent-blogging-platform-1.0.0.jar
+

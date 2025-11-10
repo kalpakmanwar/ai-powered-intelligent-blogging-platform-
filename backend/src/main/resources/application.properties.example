@@ -27,16 +27,20 @@ spring.datasource.hikari.idle-timeout=300000
 # IMPORTANT: Generate a strong random secret key for production
 # For production, use environment variable: ${JWT_SECRET}
 jwt.secret=${JWT_SECRET:YOUR_JWT_SECRET_KEY_HERE}
-jwt.expiration=86400000
+# For production, use environment variable: ${JWT_EXPIRATION}
+# Default value: 86400000 (24 hours in milliseconds)
+jwt.expiration=${JWT_EXPIRATION:86400000}
 
 # OpenRouter API Configuration
 # IMPORTANT: Get your API key from https://openrouter.ai/keys
 # NEVER commit your actual API key to version control!
-openai.api.key=YOUR_OPENROUTER_API_KEY_HERE
+# For production, use environment variable: ${OPENAI_API_KEY}
+openai.api.key=${OPENAI_API_KEY:YOUR_OPENROUTER_API_KEY_HERE}
 openai.api.base-url=https://openrouter.ai/api/v1
 
 # CORS Configuration
-cors.allowed-origins=http://localhost:3000
+# For production, use environment variable: ${FRONTEND_URL}
+cors.allowed-origins=${FRONTEND_URL:http://localhost:3000}
 
 # Disable H2 Console (using MySQL)
 spring.h2.console.enabled=false
